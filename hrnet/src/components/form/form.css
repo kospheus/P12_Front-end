@@ -1,0 +1,69 @@
+#create-employee {
+    width: fit-content;
+    padding: 24px 48px;
+    border-radius: 8px;
+    background-color: #00495f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.labels {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.inputs {
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 6px;
+    height: 46px;
+    width: 150px;
+    color: #00495f;
+}
+
+.large-inputs {
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 6px;
+    height: 46px;
+    width: 300px;
+    color: #00495f;
+}
+
+.address {
+    color: white;
+    margin: 12px 48px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block-start: 12px;
+    padding-inline-start: 24px;
+    padding-inline-end: 24px;
+    padding-block-end: 12px;
+    min-inline-size: min-content;
+    border-width: 2px;
+    border-style: groove;
+    border-color: #4ce0b3;
+    border-image: none;
+    border-radius: 8px;
+}
+
+.p-button {
+    color: #00495f;
+    background: #4ce0b3;
+    border: #00495f;
+}
+
+.button {
+    background-color: #4ce0b3;
+    border-radius: 4px;
+    padding: 12px 28px;
+    border: none;
+    color: #00495f;
+    font-size: 16px;
+    font-weight: 900;
+  }
