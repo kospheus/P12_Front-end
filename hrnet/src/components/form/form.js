@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
-import modal from '../modal/modal';
+import Modal from '../modal/modal';
 import "react-datepicker/dist/react-datepicker.css";
 import "primereact/resources/themes/tailwind-light/theme.css";
 import './form.css';
 
 function EmployeeForm() {
 
-  const [formData, setFormData] = useState({
+    let employeeList = [];
+
+    const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     dateOfBirth: '',
@@ -18,35 +20,39 @@ function EmployeeForm() {
     state: '',
     zipCode: '',
     department: '',
-  });
+    });
 
-  const [showModal, setShowModal] = useState(false);
+    const [showToast, setShowToast] = useState(false);
 
-  const handleSave = () => {
+    const handleSave = () => {
+
     // Vérifiez si tous les champs sont remplis
     if (
-      formData.firstName &&
-      formData.lastName &&
-      formData.dateOfBirth &&
-      formData.startDate &&
-      formData.street &&
-      formData.city &&
-      formData.state &&
-      formData.zipCode &&
-      formData.department  
+        formData.firstName &&
+        formData.lastName &&
+        formData.dateOfBirth &&
+        formData.startDate &&
+        formData.street &&
+        formData.city &&
+        formData.state &&
+        formData.zipCode &&
+        formData.department  
     ) {
-      setShowModal(true);
+        const handleShowToast = () => {
+            setShowToast((state) => !state);
+        };
+        handleShowToast();
     }
-  };
+    };
 
 
-  // * pour les datepickers
-  const [startDate, setStartDate] = useState(new Date());
-  const [birthDate, setBirthDate] = useState(new Date());
+    // * pour les datepickers
+    const [startDate, setStartDate] = useState(new Date());
+    const [birthDate, setBirthDate] = useState(new Date());
 
-  // * pour le select State
-  const [selectedState, setSelectedState] = useState(null)
-  const states = [
+    // * pour le select State
+    const [selectedState, setSelectedState] = useState(null)
+    const states = [
     {
         "name": "Alabama",
         "abbreviation": "AL"
@@ -283,22 +289,25 @@ function EmployeeForm() {
         "name": "Wyoming",
         "abbreviation": "WY"
     }
-  ];
+    ];
 
-  // * pour le select Department
-  const [selectedDepartment, setSelectedDepartment] = useState(null) 
-  const departments = [
+    // * pour le select Department
+    const [selectedDepartment, setSelectedDepartment] = useState(null) 
+    const departments = [
     {"name": "Sales"},
     {"name": "Marketing"},
     {"name": "Engineering"},
     {"name": "Legal"},
-  ]
+    ]
 
 
 
   return (
     <>
       <form action="#" id="create-employee">
+        <section className="form-title">
+          <h2 className='title'>Create Employee</h2> 
+        </section>
         <label htmlFor="first-name" className='labels'>First Name</label>
         <input type="text" id="first-name" className='inputs' />
 
@@ -311,7 +320,7 @@ function EmployeeForm() {
         value={birthDate} 
         onChange={(e) => setBirthDate(e.value)}
         dateFormat="dd/mm/yy"
-        className='inputs' />
+        className='calendar-inputs' />
 
         <label htmlFor="start-date" className='labels'>Start Date</label>
         <Calendar 
@@ -319,7 +328,7 @@ function EmployeeForm() {
         value={startDate} 
         onChange={(e) => setStartDate(e.value)}
         dateFormat="dd/mm/yy"
-        className='inputs' />
+        className='calendar-inputs' />
 
         <fieldset className="address">
           <legend>Address</legend>
@@ -351,9 +360,6 @@ function EmployeeForm() {
             className="large-inputs w-full md:w-14rem" />
       </form>
     <button onClick={handleSave} className='button'>Save</button>
-    {showModal && (
-        <modal />
-      )}
     </>
   );
 }

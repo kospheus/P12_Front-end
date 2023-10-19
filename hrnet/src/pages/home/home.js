@@ -7,7 +7,6 @@ function Home() {
     <div className="App">
       <Header />
       <div className="container">
-        <h2>Create Employee</h2>
         <EmployeeForm />
       </div>
     </div>
