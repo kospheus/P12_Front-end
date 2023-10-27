@@ -8,7 +8,9 @@ import './form.css';
 
 function EmployeeForm() {
 
-    let employeeList = [];
+    let employeeList = (localStorage.getItem('employeeList') !== '') ? JSON.parse(localStorage.getItem('employeeList')) : [];
+
+    localStorage.setItem('employeeList', JSON.stringify(employeeList));
 
     const [formData, setFormData] = useState({
     firstName: '',
@@ -22,27 +24,52 @@ function EmployeeForm() {
     department: '',
     });
 
-    const [showToast, setShowToast] = useState(false);
+    // const [showToast, setShowToast] = useState(false);
 
-    const handleSave = () => {
+    const handleSave = (e) => {
 
-    // Vérifiez si tous les champs sont remplis
-    if (
-        formData.firstName &&
-        formData.lastName &&
-        formData.dateOfBirth &&
-        formData.startDate &&
-        formData.street &&
-        formData.city &&
-        formData.state &&
-        formData.zipCode &&
-        formData.department  
-    ) {
-        const handleShowToast = () => {
-            setShowToast((state) => !state);
-        };
-        handleShowToast();
-    }
+        e.preventDefault()
+        let inputFirstName = document.querySelector('#first-name').value;
+        let inputLastName = document.querySelector('#first-name').value;
+        let inputDateOfBirth = document.querySelector('#first-name').value;
+        let inputStartDate = document.querySelector('#first-name').value;
+        let inputStreet = document.querySelector('#first-name').value;
+        let inputCity = document.querySelector('#first-name').value;
+        let inputState = document.querySelector('#first-name').value;
+        let inputZipCode = document.querySelector('#first-name').value;
+        let inputDepartment = document.querySelector('#first-name').value;
+
+        // Vérifiez si tous les champs sont remplis
+        if (
+            inputFirstName &&
+            inputLastName &&
+            inputDateOfBirth &&
+            inputStartDate &&
+            inputStreet &&
+            inputCity &&
+            inputState &&
+            inputZipCode &&
+            inputDepartment 
+        ) {
+            setFormData((state) => {
+                state.firstName = inputFirstName;
+                state.lastName = inputLastName;
+                state.dateOfBirth = inputDateOfBirth;
+                state.startDate = inputStartDate;
+                state.street = inputStreet;
+                state.city = inputCity;
+                state.state = inputState;
+                state.zipCode = inputZipCode;
+                state.department = inputDepartment;
+                });
+            employeeList.push(formData);
+            localStorage.setItem('employeeList', JSON.stringify(employeeList));
+            // const handleShowToast = () => {
+            //     setShowToast((state) => !state);
+            // };
+            // handleShowToast();
+            console.log(employeeList);
+        }
     };
 
 
@@ -300,11 +327,15 @@ function EmployeeForm() {
     {"name": "Legal"},
     ]
 
+    const dropdownStyle = {
+        textAlign: 'left',
+    }
+
 
 
   return (
     <>
-      <form action="#" id="create-employee">
+      <form onSubmit={handleSave} action="#" id="create-employee">
         <section className="form-title">
           <h2 className='title'>Create Employee</h2> 
         </section>
@@ -345,6 +376,7 @@ function EmployeeForm() {
             onChange={(e) => setSelectedState(e.value)} 
             options={states} optionLabel="name" 
             placeholder="Select a State"
+            style={dropdownStyle}vv
             className="large-inputs w-full md:w-14rem" />
 
           <label htmlFor="zip-code" className='labels'>Zip Code</label>
@@ -357,9 +389,10 @@ function EmployeeForm() {
             onChange={(e) => setSelectedDepartment(e.value)} 
             options={departments} optionLabel="name" 
             placeholder="Select a Department"
+            style={dropdownStyle}
             className="large-inputs w-full md:w-14rem" />
+        <button onClick={handleSave} className='button'>Save</button>
       </form>
-    <button onClick={handleSave} className='button'>Save</button>
     </>
   );
 }

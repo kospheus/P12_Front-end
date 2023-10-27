@@ -1,7 +1,7 @@
 import React from 'react';
 import './header.css';
 
-function Header() {
+function HeaderCurrentEmployee() {
   return (
     <header className="header">
       <div className="logo">
@@ -9,11 +9,11 @@ function Header() {
       </div>
       <nav className="nav">
         <ul>
-          <li><a className='nav-item' href="/employee-list">Current Employees</a></li>
+          <li><a className='nav-item' href="/">Home</a></li>
         </ul>
       </nav>
     </header>
   );
 }
 
-export default Header;
+export default HeaderCurrentEmployee;
