@@ -12,7 +12,8 @@ function List() {
     useEffect(() => {
         const storedData = localStorage.getItem('employeeList');
         const employeeData = storedData ? JSON.parse(storedData) : [];
-        setEmployee(employeeData);
+        const nonEmptyEmployeeData = employeeData.filter(employee => employee && Object.keys(employee).length !== 0);
+        setEmployee(nonEmptyEmployeeData);
     }, []);
 
     const [globalFilterValue, setGlobalFilterValue] = useState('');
