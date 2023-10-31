@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import './modal.css'; // Assurez-vous de définir vos styles CSS pour le modal toast.
+import './modal.css'
 
-function Modal({ message, showToast, onClose }) {
-  const [visible, setVisible] = useState(false);
+function ModalToast({ message, isVisible, onClose, duration = 5000 }) {
+    const [timeLeft, setTimeLeft] = useState(duration);
+    const intervalDuration = 50; // 50ms pour mettre à jour le pourcentage
+    const percentage = (timeLeft / duration) * 100;
 
-  useEffect(() => {
-    if (showToast) {
-      setVisible(true);
-      // Fermez le toast après 3 secondes (ajustez ce délai selon vos besoins).
-      const timeout = setTimeout(() => {
-        setVisible(false);
-        onClose();
-      }, 3000);
+    useEffect(() => {
+        if (timeLeft <= 0) {
+            onClose(); // Ferme la modale lorsque le timer est terminé
+            return;
+        }
 
-      return () => clearTimeout(timeout);
-    }
-  }, [showToast, onClose]);
+        const intervalId = setInterval(() => {
+            setTimeLeft(prevTime => prevTime - intervalDuration);
+        }, intervalDuration);
 
-  return (
-    <div className={`modal-toast ${visible ? 'visible' : ''}`}>
-      {message}
-    </div>
-  );
+        return () => clearInterval(intervalId); // N'oubliez pas de nettoyer l'intervalle !
+    }, [timeLeft, onClose]);
+
+    if (!isVisible) return null;
+
+    return (
+        <div className="modal-toast">
+            <span className="modal-toast-message">{message}</span>
+            <button className="modal-toast-close" onClick={onClose}>&times;</button>
+            <div className="modal-toast-timer" style={{ width: `${percentage}%` }}></div>
+        </div>
+    );
 }
 
-export default Modal;
+export default ModalToast;

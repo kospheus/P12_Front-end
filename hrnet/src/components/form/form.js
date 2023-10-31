@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
-import Modal from '../modal/modal';
+import ModalToast from '../modal/modal';
 import "react-datepicker/dist/react-datepicker.css";
 import "primereact/resources/themes/tailwind-light/theme.css";
 import './form.css';
 
 function EmployeeForm() {
 
-    let employeeList = (localStorage.getItem('employeeList') !== '') ? JSON.parse(localStorage.getItem('employeeList')) : [];
+    let storedData = localStorage.getItem('employeeList');
+    let employeeList = (storedData && storedData !== 'null' && storedData !== '') ? JSON.parse(storedData) : [];
 
     localStorage.setItem('employeeList', JSON.stringify(employeeList));
+
+    const [isToastVisible, setToastVisible] = useState(false);
 
     const [formData, setFormData] = useState({
     firstName: '',
@@ -24,20 +27,28 @@ function EmployeeForm() {
     department: '',
     });
 
+    function formatDateToMMDDYYYY(isoDate) {
+        const date = new Date(isoDate);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Les mois sont de 0 à 11, donc on ajoute 1
+        const day = date.getDate().toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${month}/${day}/${year}`;
+    }
+
     // const [showToast, setShowToast] = useState(false);
 
     const handleSave = (e) => {
 
         e.preventDefault()
         let inputFirstName = document.querySelector('#first-name').value;
-        let inputLastName = document.querySelector('#first-name').value;
-        let inputDateOfBirth = document.querySelector('#first-name').value;
-        let inputStartDate = document.querySelector('#first-name').value;
-        let inputStreet = document.querySelector('#first-name').value;
-        let inputCity = document.querySelector('#first-name').value;
-        let inputState = document.querySelector('#first-name').value;
-        let inputZipCode = document.querySelector('#first-name').value;
-        let inputDepartment = document.querySelector('#first-name').value;
+        let inputLastName = document.querySelector('#last-name').value;
+        let inputDateOfBirth = formatDateToMMDDYYYY(birthDate);
+        let inputStartDate = formatDateToMMDDYYYY(startDate);
+        let inputStreet = document.querySelector('#street').value;
+        let inputCity = document.querySelector('#city').value;
+        let inputState = selectedState.name;
+        let inputZipCode = document.querySelector('#zip-code').value;
+        let inputDepartment = selectedDepartment.name;
 
         // Vérifiez si tous les champs sont remplis
         if (
@@ -64,10 +75,7 @@ function EmployeeForm() {
                 });
             employeeList.push(formData);
             localStorage.setItem('employeeList', JSON.stringify(employeeList));
-            // const handleShowToast = () => {
-            //     setShowToast((state) => !state);
-            // };
-            // handleShowToast();
+            setToastVisible(true);
             console.log(employeeList);
         }
     };
@@ -335,64 +343,72 @@ function EmployeeForm() {
 
   return (
     <>
-      <form onSubmit={handleSave} action="#" id="create-employee">
-        <section className="form-title">
-          <h2 className='title'>Create Employee</h2> 
-        </section>
-        <label htmlFor="first-name" className='labels'>First Name</label>
-        <input type="text" id="first-name" className='inputs' />
+        <form onSubmit={handleSave} action="#" id="create-employee">
+            <section className="form-title">
+            <h2 className='title'>Create Employee</h2> 
+            </section>
+            <label htmlFor="first-name" className='labels'>First Name</label>
+            <input type="text" id="first-name" className='inputs' />
 
-        <label htmlFor="last-name" className='labels'>Last Name</label>
-        <input type="text" id="last-name" className='inputs'/>
+            <label htmlFor="last-name" className='labels'>Last Name</label>
+            <input type="text" id="last-name" className='inputs'/>
 
-        <label htmlFor="date-of-birth" className='labels'>Date of Birth</label>
-        <Calendar 
-        showIcon
-        value={birthDate} 
-        onChange={(e) => setBirthDate(e.value)}
-        dateFormat="dd/mm/yy"
-        className='calendar-inputs' />
+            <label htmlFor="date-of-birth" className='labels'>Date of Birth</label>
+            <Calendar 
+            showIcon
+            value={birthDate} 
+            onChange={(e) => setBirthDate(e.value)}
+            dateFormat="dd/mm/yy"
+            id='date-of-birth'
+            className='calendar-inputs' />
 
-        <label htmlFor="start-date" className='labels'>Start Date</label>
-        <Calendar 
-        showIcon
-        value={startDate} 
-        onChange={(e) => setStartDate(e.value)}
-        dateFormat="dd/mm/yy"
-        className='calendar-inputs' />
+            <label htmlFor="start-date" className='labels'>Start Date</label>
+            <Calendar 
+            showIcon
+            value={startDate} 
+            onChange={(e) => setStartDate(e.value)}
+            dateFormat="dd/mm/yy"
+            id='start-date'
+            className='calendar-inputs' />
 
-        <fieldset className="address">
-          <legend>Address</legend>
+            <fieldset className="address">
+            <legend>Address</legend>
 
-          <label htmlFor="street" className='labels'>Street</label>
-          <input id="street" type="text" className='large-inputs'/>
+            <label htmlFor="street" className='labels'>Street</label>
+            <input id="street" type="text" className='large-inputs'/>
 
-          <label htmlFor="city" className='labels'>City</label>
-          <input id="city" type="text" className='large-inputs'/>
+            <label htmlFor="city" className='labels'>City</label>
+            <input id="city" type="text" className='large-inputs'/>
 
-          <label htmlFor="state" className='labels'>State</label>
-          <Dropdown 
-            value={selectedState} 
-            onChange={(e) => setSelectedState(e.value)} 
-            options={states} optionLabel="name" 
-            placeholder="Select a State"
-            style={dropdownStyle}vv
-            className="large-inputs w-full md:w-14rem" />
+            <label htmlFor="state" className='labels'>State</label>
+            <Dropdown 
+                value={selectedState} 
+                onChange={(e) => setSelectedState(e.value)} 
+                options={states} optionLabel="name" 
+                placeholder="Select a State"
+                style={dropdownStyle}
+                id='state'
+                className="large-inputs w-full md:w-14rem" />
 
-          <label htmlFor="zip-code" className='labels'>Zip Code</label>
-          <input id="zip-code" type="number" className='large-inputs'/>
-        </fieldset>
+            <label htmlFor="zip-code" className='labels'>Zip Code</label>
+            <input id="zip-code" type="number" className='large-inputs'/>
+            </fieldset>
 
-        <label htmlFor="department" className='labels'>Department</label>
-        <Dropdown 
-            value={selectedDepartment} 
-            onChange={(e) => setSelectedDepartment(e.value)} 
-            options={departments} optionLabel="name" 
-            placeholder="Select a Department"
-            style={dropdownStyle}
-            className="large-inputs w-full md:w-14rem" />
-        <button onClick={handleSave} className='button'>Save</button>
-      </form>
+            <label htmlFor="department" className='labels'>Department</label>
+            <Dropdown 
+                value={selectedDepartment} 
+                onChange={(e) => setSelectedDepartment(e.value)} 
+                options={departments} optionLabel="name" 
+                placeholder="Select a Department"
+                style={dropdownStyle}
+                id='department'
+                className="large-inputs w-full md:w-14rem" />
+            <button type="submit" className='button'>Save</button>
+        </form>
+        {isToastVisible && <ModalToast 
+        message="Employee added successfully !" 
+        isVisible={isToastVisible} 
+        onClose={() => setToastVisible(false)} />}
     </>
   );
 }
