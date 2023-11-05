@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
-import ModalToast from '../modal/modal';
+import { ModalToast } from '@kospheus/modal-toast';
 import "react-datepicker/dist/react-datepicker.css";
 import "primereact/resources/themes/tailwind-light/theme.css";
 import './form.css';

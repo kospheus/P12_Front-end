@@ -37,6 +37,10 @@ function List() {
         setGlobalFilterValue(value);
     };
 
+    /**
+     * 
+     * @returns 
+     */
     const renderHeader = () => {
         return (
             <div className="flex justify-content-end">
