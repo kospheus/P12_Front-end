@@ -77,6 +77,22 @@ function EmployeeForm() {
             localStorage.setItem('employeeList', JSON.stringify(employeeList));
             setToastVisible(true);
             console.log(employeeList);
+
+            setFormData({
+                firstName: '',
+                lastName: '',
+                dateOfBirth: '',
+                startDate: '',
+                street: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                department: '',
+            });
+            setBirthDate(new Date());
+            setStartDate(new Date());
+            setSelectedState(null);
+            setSelectedDepartment(null);
         }
     };
 
@@ -348,10 +364,14 @@ function EmployeeForm() {
             <h2 className='title'>Create Employee</h2> 
             </section>
             <label htmlFor="first-name" className='labels'>First Name</label>
-            <input type="text" id="first-name" className='inputs' />
+            <input type="text" id="first-name" className='inputs'
+            value={formData.firstName}
+            onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
 
             <label htmlFor="last-name" className='labels'>Last Name</label>
-            <input type="text" id="last-name" className='inputs'/>
+            <input type="text" id="last-name" className='inputs'
+            value={formData.lastName}
+            onChange={(e) => setFormData({...formData, lastName: e.target.value})}/>
 
             <label htmlFor="date-of-birth" className='labels'>Date of Birth</label>
             <Calendar 
@@ -375,10 +395,14 @@ function EmployeeForm() {
             <legend>Address</legend>
 
             <label htmlFor="street" className='labels'>Street</label>
-            <input id="street" type="text" className='large-inputs'/>
+            <input id="street" type="text" className='large-inputs'
+            value={formData.street}
+            onChange={(e) => setFormData({...formData, street: e.target.value})}/>
 
             <label htmlFor="city" className='labels'>City</label>
-            <input id="city" type="text" className='large-inputs'/>
+            <input id="city" type="text" className='large-inputs'
+            value={formData.city}
+            onChange={(e) => setFormData({...formData, city: e.target.value})}/>
 
             <label htmlFor="state" className='labels'>State</label>
             <Dropdown 
@@ -391,7 +415,9 @@ function EmployeeForm() {
                 className="large-inputs w-full md:w-14rem" />
 
             <label htmlFor="zip-code" className='labels'>Zip Code</label>
-            <input id="zip-code" type="number" className='large-inputs'/>
+            <input id="zip-code" type="number" className='large-inputs'
+            value={formData.zipCode}
+            onChange={(e) => setFormData({...formData, zipCode: e.target.value})}/>
             </fieldset>
 
             <label htmlFor="department" className='labels'>Department</label>
